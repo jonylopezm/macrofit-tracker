@@ -12,9 +12,9 @@ export const Navbar = () => {
         <a href="#" className="text-lg font-semibold tracking-widest text-gray-200 uppercase rounded-lg focus:outline-none focus:shadow-outline">MacroFit Tracker</a>
       </div>
       <nav className="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
-        <a className="px-4 py-2 mt-2 text-lg font-medium bg-transparent rounded-lg md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">Inicio</a>
-        <a className="px-4 py-2 mt-2 text-lg font-medium bg-transparent rounded-lg md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">Sig In</a>
-        <a className="px-4 py-2 mt-2 text-lg font-medium text-white bg-[#fb6107] rounded-lg md:mt-0 md:ml-4 focus:text-gray-900  focus:outline-none focus:shadow-outline" href="#">Sig Up</a>
+        <a className="px-4 py-2 mt-2 text-lg font-medium bg-transparent rounded-lg md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="/startpage">Inicio</a>
+        <a className="px-4 py-2 mt-2 text-lg font-medium bg-transparent rounded-lg md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="/login">Sig In</a>
+        <a className="px-4 py-2 mt-2 text-lg font-medium text-white bg-[#fb6107] rounded-lg md:mt-0 md:ml-4 focus:text-gray-900  focus:outline-none focus:shadow-outline" href="/register">Sig Up</a>
           
          </nav>
         </div>

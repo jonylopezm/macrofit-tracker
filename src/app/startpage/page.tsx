@@ -15,8 +15,8 @@ const StartPage = async () => {
           <h1 className="text text-8xl font-semibold text-[#f3de2c]">Macrofit <br/>  Tracker</h1>
 
           <div className="mt-10">
-            <a href="/dashboard/signup" className="bg-[#fb6107] rounded-3xl py-3 px-8 font-medium text-lg inline-block mr-4 hover:bg-transparent hover:border-[#fb6107] border border-transparent hover:text-white transition duration-300">Get Started</a>
-            <a href="/dashboard/login" className="bg-transparent rounded-3xl py-3 px-8 font-medium text-lg inline-block mr-4 hover:border-transparent hover:bg-white border hover:text-slate-950 transition duration-300">Login</a>
+            <a href="/startpage" className="bg-[#fb6107] rounded-3xl py-3 px-8 font-medium text-lg inline-block mr-4 hover:bg-transparent hover:border-[#fb6107] border border-transparent hover:text-white transition duration-300">Get Started</a>
+            <a href="/login" className="bg-transparent rounded-3xl py-3 px-8 font-medium text-lg inline-block mr-4 hover:border-transparent hover:bg-white border hover:text-slate-950 transition duration-300">Login</a>
           </div>
           </div>
         </div>       
