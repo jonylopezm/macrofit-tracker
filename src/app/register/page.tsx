@@ -1,8 +1,10 @@
 "use client"
 import { error } from 'console';
+import { redirect } from 'next/navigation';
 import React, { useState } from 'react'
 import { HiArrowCircleRight } from "react-icons/hi";
 import { RiMentalHealthFill } from 'react-icons/ri';
+import Login from '../login/page';
 
 const Register = () => {
     
@@ -10,13 +12,20 @@ const Register = () => {
     const [last_name, setLast_name] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPwd, setConfirmPwd] = useState("");
     const [error, setError] = useState("");
+    const [pwdError, setPwdError] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) =>{
         e.preventDefault();
 
         if(!first_name || !email || !password || !last_name){
             setError("Llena todos los campos");
+            return;
+        }
+
+        if(password != confirmPwd){
+            setPwdError("Las contrasenias no coinciden")
             return;
         }
 
@@ -27,20 +36,23 @@ const Register = () => {
                     "Content-Type": "aplication/json"
                 },
                 body: JSON.stringify({
-                    first_name, last_name,email, password,
+                    first_name, last_name,email, password
                 })
-            });
 
+                
+            });
             if(res.ok){
-                <form action="" className="reset"></form>
+                alert("Registrado: "+ first_name)
+                
             }else{
                 console.log("No se registro");
             }
+
         } catch (error) {
-            
+            console.log(error)
         }
     };
-    console.log("Name: ", first_name)
+   
 
 
     return (
@@ -76,11 +88,6 @@ const Register = () => {
                     </div>
 
                     <div>
-                        <label className="block mb-2 text-sm text-gray-200">Sexo</label>
-                        <input type="text" placeholder="XXX-XX-XXXX-XXX" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
-                    </div>
-
-                    <div>
                         <label className="block mb-2 text-sm text-gray-200">Correo Electronico</label>
                         <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="johnsnow@example.com" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
                     </div>
@@ -92,9 +99,11 @@ const Register = () => {
 
                     <div>
                         <label className="block mb-2 text-sm text-gray-200">Confirme su contraseña</label>
-                        <input type="password" placeholder="Enter your password" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
+                        {pwdError &&( <p className='text-red-500'>{pwdError}</p>   )}
+                        <input onChange={(e) => setConfirmPwd(e.target.value)} type="password" placeholder="Enter your password" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
                     </div>
 
+                    <div className="flex mt-10 pt-14">
                     <button
                         className="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide mb-5 font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-[#fb6107] focus:ring-4 focus:ring-purple-blue-100 bg-[#fbb02d]">
                         <span>Sign Up </span>
@@ -102,6 +111,8 @@ const Register = () => {
                         <HiArrowCircleRight className="w-5 h-5 rtl:-scale-x-100" />
 
                     </button>
+                    </div>
+                   
 
                 </form>
                     {

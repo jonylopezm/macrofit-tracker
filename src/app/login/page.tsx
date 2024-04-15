@@ -1,7 +1,42 @@
+"use client"
 import { RiMentalHealthFill } from 'react-icons/ri';
 import React, { useState } from 'react';
 
 const Login = () => {
+  
+  const [email, setEmail]= useState("");
+  const [password, setPassword]= useState("");
+  const [error, setError]= useState("");
+
+  const handleSubmit = async (e:React.FormEvent)=>{
+    e.preventDefault()
+
+    if(!email || !password ){
+      setError("Debes llenar todos los campos");
+      return;
+    }
+
+    try {
+      const res = await fetch('api/login',{
+        method: "POST",
+        headers:{
+          "Content-Type": "aplication/json"
+        },
+        body: JSON.stringify({
+          email, password
+        })
+      });
+
+      if(res.ok){
+        alert("Inicio de Sesion correcto");
+      }else{
+        alert("No se inicio sesion")
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 
   return (
     <div className="flex flex-col bg-gradient-to-br from-green-900 to-yellow-700">
@@ -15,7 +50,7 @@ const Login = () => {
         <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
           <div className="flex items-center justify-center w-full lg:p-12">
             <div className="flex items-center">
-              <form className="flex flex-col w-full h-full pb-4 text-center rounded-3xl">
+              <form onSubmit={handleSubmit} className="flex flex-col w-full h-full pb-4 text-center rounded-3xl">
                 
                 <h3 className="mb-3 text-4xl font-extrabold text-white">Sign In</h3>
                 <p className="mb-4 text-white">Ingresa tu correo y contraseña</p>
@@ -27,6 +62,7 @@ const Login = () => {
                   id="email"
                   type="email"
                   name='email'
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="correo@ejemplo.com"
                   className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-dark-grey-900 rounded-2xl"
                 />
@@ -35,11 +71,15 @@ const Login = () => {
                   id="password"
                   type="password"
                   name='password'
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Ingresa tu contraseña"
                   className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-gray-200 text-dark-grey-900 rounded-2xl"
                 />
                 <div className="flex flex-row justify-between mb-8">
                   <a href="javascript:void(0)" className="mr-4 text-sm font-medium text-[#fbb02d] ">Forget password?</a>
+                  {error &&(
+                    <a className=' text-red-600'>{error}</a>
+                  )}
                 </div>
                 <button
                   type="submit"     
