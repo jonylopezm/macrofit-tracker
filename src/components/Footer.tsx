@@ -11,7 +11,7 @@ export const Footer = () => {
 	<footer className="p-4 bg-white sm:p-6">
 		<div className="md:flex md:justify-between">
 			<div className="mb-6 md:mb-0">
-				<a href="/dashboard/main" target="_blank" className="flex items-center">
+				<a href="/startpage" className="flex items-center">
                 <RiMentalHealthFill  className="w-6 h-6 m-1 fill-slate-800" />
 					<span className="self-center text-xl font-semibold whitespace-nowrap text-slate-800 ">Macrofit Tracker</span>
 				</a>
@@ -19,7 +19,7 @@ export const Footer = () => {
 			<div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-2">
 				
 				<div>
-					<h3 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Follow us</h3>
+					<h3 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Repositorio</h3>
 					<ul>
 						<li className="mb-4">
 							<a href="#" target="_blank"
