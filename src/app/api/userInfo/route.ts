@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import {getInfoUser } from '@/lib/cassandra';
 import { json } from "stream/consumers";
 

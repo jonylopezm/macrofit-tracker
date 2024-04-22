@@ -1,7 +1,6 @@
 "use client"
 import { RiMentalHealthFill } from 'react-icons/ri';
 import React, { useState } from 'react';
-import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
 const Login = () => {
@@ -31,7 +30,8 @@ const Login = () => {
       });
 
       if(res.ok){
-        router.push("/dashboard")
+        router.push("/dashboard/home")
+        localStorage.setItem('email', email)
       }else{
         alert("Correo o contraseña incorrectos " + res.status)
       }
