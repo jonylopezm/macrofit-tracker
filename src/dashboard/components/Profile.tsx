@@ -1,11 +1,19 @@
 import Image from 'next/image';
 import { SimpleUser } from '@/dashboard/interfaces/simple-user';
+import { useState } from 'react';
 
 interface Props {
   userInfo: SimpleUser | null;
 }
 
 export const Profile: React.FC<Props> = ({ userInfo }) => {
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  if (typeof window !== 'undefined') {
+    localStorage.setItem("user_id", `${userInfo?.user_id}`);
+  }
+ 
   return (
     <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-1">
       <div className="relative flex flex-col bg-clip-border pb-6 mb-4 rounded-xl bg-slate-50 text-gray-600 shadow-md overflow-hidden xl:col-span-2">
@@ -29,11 +37,20 @@ export const Profile: React.FC<Props> = ({ userInfo }) => {
             id=":r5:"
             className="relative middle none justify-end font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
             type="button"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-             <svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" viewBox="0 0 24 24" stroke-width="3" stroke="currentcolor" aria-hidden="true" className="h-6 w-6">
-                  <path stroke-linecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"></path>
-              </svg>
+             <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" viewBox="0 0 24 24" strokeWidth="3" stroke="currentcolor" aria-hidden="true" className="h-6 w-6">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"></path>
+               </svg>
+             </span>
           </button>
+
+          {isMenuOpen && (
+        <div className="absolute top-14 right-5 z-10 bg-white shadow-md p-2 rounded-md">
+          <button onClick={() => console.log('Editar')} className="block w-full text-left">Editar</button>
+        </div>
+      )}
         </div>
         <div className="grid gap-y-10 gap-x-6 mx-10 md:grid-cols-2 xl:grid-cols-4">
         <div className="relative flex flex-col items-center bg-clip-border rounded-xl bg-gradient-to-tr from-[#5c8001] to-[#7cb518] text-white shadow-md">

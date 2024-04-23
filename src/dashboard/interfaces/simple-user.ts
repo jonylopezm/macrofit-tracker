@@ -8,6 +8,7 @@ export interface SimpleUser {
     height:               number;
     last_name:            string;
     weight:               number;
+    gender:               string;
 }
 
 export enum ActivityLevel {

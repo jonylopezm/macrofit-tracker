@@ -1,7 +1,7 @@
 import  {Client, auth} from 'cassandra-driver';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
-import {User} from '@/dashboard/interfaces/user-info';
+
 
 const cloud = { secureConnectBundle: `${process.env.SECURE_BUNDLE_PATH}` };
 const authProvider = new auth.PlainTextAuthProvider('token', `${process.env.ASTRA_DB_APPLICATION_TOKEN}`);
@@ -45,14 +45,11 @@ export const userExists = async(email:string)=>{
         const query = `SELECT email FROM macrofit_tracker.users WHERE email=? ALLOW FILTERING;`
         const params = [email];
         const exists = await client.execute(query, params, {prepare: true})
-    
         return exists.rows.length > 0;
     } catch (error) {
         console.error('Error checking email:', error);
         throw error;
-    }
-
-    
+    } 
 }
 
 export const authUser = async(email: string, password:string)=>{
@@ -98,8 +95,6 @@ export const getInfoUser = async(email: string) => {
 
         if (result.rowLength > 0) {
             const user = result.first();
-            console.log(user)
-
             return user;
         } else {
             return null;
@@ -112,3 +107,21 @@ export const getInfoUser = async(email: string) => {
     }
     return null;
 }
+
+export const updateProfile = async (age: number, weight: number, height: number, user_id: string) => {
+    try {
+        await client.connect();
+
+        const query = 'UPDATE macrofit_tracker.users SET age=?, weight=?, height=? WHERE user_id=?';
+        const params = [age, weight, height, user_id];
+
+        await client.execute(query, params, { prepare: true });
+
+        console.log("Información del usuario actualizada correctamente.");
+        return true;
+
+    } catch (error) {
+        console.log("Error al actualizar la información del usuario:", error);
+        return false;
+    }
+};
