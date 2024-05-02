@@ -1,66 +1,50 @@
 "use client"
 import React, { useState } from 'react'
+import { Footer } from '@/components/Footer';
+import { Resend } from 'resend';
 
-const ResetPasswordForm = () => {
-
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-
-
-    const handleResetPassword = async (event: React.FormEvent) => {
-      event.preventDefault();
+const ForgotPasswordForm = () => {
   
-      if(password != confirmPassword){
-        alert("Las contraseñas no coinciden")
-        return;
-    }else{
-        try {
-            const res = await fetch('api/restorePassword', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ password })
-            });
-    
-            if (res.ok) {
-                console.log('Password reset email sent.');
-            } else {
-                console.error('Failed to send password reset email.');
-            }
-        } catch (error) {
-            console.error('An error occurred while sending password reset email:', error);
+  const [email, setEmail] = useState('');
+
+  const handleResetPassword = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+        const res = await fetch('api/restorePassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email }) // Enviar la dirección de correo electrónico al backend
+        });
+
+        if (res.ok) {
+            console.log('Password reset email sent.');
+        } else {
+            console.error('Failed to send password reset email.');
         }
+    } catch (error) {
+        console.error('An error occurred while sending password reset email:', error);
     }
-  };
-    
+};
   return (
   
     <div >
         <div className=" bg-gradient-to-br from-green-900 to-yellow-700 pt-20 pb-16">
     <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
     <h1 className="text-4xl font-medium text-slate-600">Reestablecer Contraseña</h1>
-    <p className="text-slate-500">Ingresa tu nueva contraseña</p>
+    <p className="text-slate-500">Introduce tu correo electronico para reestablecer tu contraseña</p>
 
     <form onSubmit={handleResetPassword} action="" className="my-10">
         <div className="flex flex-col space-y-5">
             <label>
-                <p className="font-medium text-slate-700 pb-2">Contraseña nueva</p>
+                <p className="font-medium text-slate-700 pb-2">Email address</p>
                 <input 
-                id="password" 
-                name="password" 
-                type="password" 
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow" placeholder="Enter email address"/>
-            </label>
-
-            <label>
-                <p className="font-medium text-slate-700 pb-2">Confirmar Contraseña</p>
-                <input 
-                id="confirmPassword" 
-                name="confirmPassword" 
-                type="password" 
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                id="email" 
+                name="email" 
+                type="email" 
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow" placeholder="Enter email address"/>
             </label>
            
@@ -78,8 +62,10 @@ const ResetPasswordForm = () => {
     </form>
 </div>
 </div>
+<Footer/>
 </div>
+
   )
 }
 
-export default ResetPasswordForm
+export default ForgotPasswordForm

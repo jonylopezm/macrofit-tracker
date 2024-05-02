@@ -1,10 +1,8 @@
 "use client"
-import { error } from 'console';
-import { redirect } from 'next/navigation';
 import React, { useState } from 'react'
 import { HiArrowCircleRight } from "react-icons/hi";
 import { RiMentalHealthFill } from 'react-icons/ri';
-import Login from '../login/page';
+
 
 const Register = () => {
     

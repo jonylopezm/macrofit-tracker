@@ -1,171 +1,210 @@
 "use client"
-import React, { ChangeEvent, ReactElement, ReactEventHandler, ReactHTMLElement } from 'react'
+import React, { ChangeEvent, ReactElement, ReactEventHandler, ReactHTMLElement, useEffect } from 'react'
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Food } from '@/dashboard';
 
- 
 const RegisterFood = () => {
+  const [filteredFoodData, setFilteredFoodData] = useState<Food[]>([]);
+  const [selectedFood, setSelectedFood] = useState<Food | null>(null);
+  const [quantity, setQuantity] = useState<number | undefined>(undefined);
   const [startDate, setStartDate] = useState<Date | null>(null);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [mealType, setMealType] = useState('desayuno');
+
+  useEffect(() => {
+    // Realiza una petición para obtener todos los datos de comida
+    fetch('/api/food', {
+      method: 'POST',
+    })
+      .then(response => response.json())
+      .then(data => {
+        setFilteredFoodData(data); // Cuando se cargan los datos, inicialmente se muestran todos
+      })
+      .catch(error => console.error('Error al obtener datos de comida:', error));
+  }, []);
 
   const handleDateChange = (date: Date | null) => {
     setStartDate(date);
   };
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(e.target.value);
+    const selectedFoodId = e.target.value;
+    const food = filteredFoodData.find(food => food.food_id === selectedFoodId);
+    if (food) {
+      setSelectedFood(food);
+      // Establece la cantidad correspondiente a la comida seleccionada
+      setQuantity(food.serving_size);
+    } else {
+      setSelectedFood(null);
+      setQuantity(undefined); // Si no se selecciona ninguna comida, borra la cantidad
+    }
+  };
+ 
+  const handleMealTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setMealType(e.target.value); // Actualiza el estado con el valor seleccionado del tiempo de comida
   };
 
-  const [showError, setShowError] = useState(false);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const toggleError = () => {
-    setShowError(!showError);
+    try {
+      // Verifica que se haya seleccionado una comida y se haya establecido una cantidad
+      if (!selectedFood || quantity === undefined || !startDate) {
+        console.error('Food, quantity, or date is missing.');
+        return;
+      }
+  
+      const formattedDate = startDate.toISOString().split('T')[0]; // Formatea la fecha en formato yyyy-mm-dd
+  
+      const res = await fetch('/api/newfood', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_id: localStorage.getItem("user_id"),
+          food_id: selectedFood.food_id,
+          date: formattedDate,
+          meal_type: mealType,
+          quantity: quantity,
+        })
+      });
+  
+      if (res.ok) {
+        console.log('Food record created.');
+
+      } else {
+        console.error('Error creating food record.');
+      }
+    } catch (error) {
+      console.error('An error occurred while creating food record:', error);
+ 
+    }
   };
+  
 
   return (
-    <div>
-      <div className="min-h-screen bg-gray-100 p-0 sm:p-12">
-  <div className="mx-auto max-w-md px-6 py-12 bg-white border-0 shadow-lg sm:rounded-3xl">
-    <h1 className="text-2xl font-bold mb-8">Form With Floating Labels</h1>
-    <form id="form" noValidate>
-      <div className="relative z-0 w-full mb-5">
-        <input
-          type="text"
-          name="name"
-          placeholder=" "
-          required
-          className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-        />
-        <label htmlFor="name" className="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Enter name</label>
-        <span className="text-sm text-red-600 hidden" id="error">Name is required</span>
-      </div>
-
-      <div className="relative z-0 w-full mb-5">
-        <input
-          type="email"
-          name="email"
-          placeholder=" "
-          className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-        />
-        <label htmlFor="email" className="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Enter email address</label>
-        <span className="text-sm text-red-600 hidden" id="error">Email address is required</span>
-      </div>
-
-      <div className="relative z-0 w-full mb-5">
-        <input
-          type="password"
-          name="password"
-          placeholder=" "
-          className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-        />
-        <label htmlFor="password" className="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Enter password</label>
-        <span className="text-sm text-red-600 hidden" id="error">Password is required</span>
-      </div>
-
+    
+  <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-1 bg-gradient-to-t rounded-xl bg-slate-50 text-gray-600">
+  <div className="mx-auto max-w-full w-screen px-6 py-12 bg-white border-0 shadow-lg sm:rounded-3xl">
+    <h1 className="text-2xl font-bold mb-8">Registrar alimento</h1>
+    <form onSubmit={handleSubmit} >
+      {/*Tiempo de comida */}
       <fieldset className="relative z-0 w-full p-px mb-5">
-        <legend className="absolute text-gray-500 transform scale-75 -top-3 origin-0">Choose an option</legend>
+        <legend className="absolute text-gray-500 transform -top-3 origin-0">Tiempo de comida</legend>
         <div className="block pt-3 pb-2 space-x-4">
           <label>
             <input
               type="radio"
               name="radio"
-              value="1"
+              value="desayuno"
+              checked={mealType === 'desayuno'} // Marca como seleccionado si el valor del estado es '1'
+              onChange={handleMealTypeChange} // Maneja el cambio de valor
               className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
             />
-            Option 1
+            Desayuno
           </label>
           <label>
             <input
               type="radio"
               name="radio"
-              value="2"
+              value="almuerzo"
+              checked={mealType === 'almuerzo'} // Marca como seleccionado si el valor del estado es '1'
+              onChange={handleMealTypeChange} // Maneja el cambio de valor
               className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
             />
-            Option 2
+            Almuerzo
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="radio"
+              value="cena"
+              checked={mealType === 'cena'} // Marca como seleccionado si el valor del estado es '1'
+              onChange={handleMealTypeChange} // Maneja el cambio de valor
+              className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+            />
+            Cena
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="radio"
+              value="snack"
+              checked={mealType === 'snack'} // Marca como seleccionado si el valor del estado es '1'
+              onChange={handleMealTypeChange} // Maneja el cambio de valor
+              className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+            />
+            Snack
           </label>
         </div>
         <span className="text-sm text-red-600 hidden" id="error">Option has to be selected</span>
       </fieldset>
+      {/* Opciones de comida */}
+      <div className="mx-auto max-w-full w-screen pb-4 flex justify-start items-center">
+            <div className='relative z-0 w-1/2 mb-5 mt-5'>
+              <a>Seleccione la Comida</a>
+              <select
+                name="foodSelect"
+                value={selectedFood ? selectedFood.food_id : ''}
+                onChange={handleSelectChange}
+                className="pt-3 pb-2 block w-full px-0 mt-0 border-0 border-b-2 appearance-none z-1 focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+              >
+                <option value="" selected disabled hidden></option>
+                {filteredFoodData.map(food => (
+                  <option key={food.food_id} value={food.food_id}>{food.name}</option>
+                ))}
+              </select>
+            </div>
+            {/* Cantidad */}
+            <div className='relative z-0 w-20 my-5 mx-4'>
+              <a>Cantidad</a>
+              <input
+                type="number"
+                name="cantidad"
+                placeholder=" "
+                required
+                value={quantity || ''}
+                onChange={(e) => setQuantity(parseInt(e.target.value))}
+                className="pt-3 pb-2 block w-full px-0 text-center mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+              />
+            </div>
 
-      <div className="relative z-0 w-full mb-5">
-        <select
-          name="select"
-          value={selectedOption}
-          onChange={handleSelectChange}
-          className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none z-1 focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-        >
-          <option value="" selected disabled hidden></option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-          <option value="4">Option 4</option>
-          <option value="5">Option 5</option>
-        </select>
-        <label htmlFor="select" className="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Select an option</label>
-        <span className="text-sm text-red-600 hidden" id="error">Option has to be selected</span>
-      </div>
-
-      <div className="flex flex-row space-x-4">
-        <div className="relative z-0 w-full mb-5">
-        <DatePicker
+            {/* Unidades de tamaño de porción */}
+            {selectedFood && (
+              
+                <a className=' font-medium mt-6'>{selectedFood.serving_size_units}</a>
+                
+            )}
+          </div>
+          {/* Fecha */}
+          <div className="flex flex-row space-x-4">
+            <div className="relative z-0 w-full mb-5">
+              <DatePicker
                 selected={startDate}
                 onChange={handleDateChange}
                 dateFormat="dd/MM/yyyy"
-                placeholderText="Select a date"
-                className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                placeholderText="Cambiar la fecha"
+                className="pt-3 pb-2 w-full px-0 mt-0 bg-white border-0 border-b-2 focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                calendarClassName="absolute block bg-white shadow-md border border-gray-800"
+                shouldCloseOnSelect={false}
               />
-          <label htmlFor="date" className="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Date</label>
-          <span className="text-sm text-red-600 hidden" id="error">Date is required</span>
-        </div>
-        <div className="relative z-0 w-full">
-          <input
-            type="text"
-            name="time"
-            placeholder=" "
-            className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-          />
-          <label htmlFor="time" className="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Time</label>
-          <span className="text-sm text-red-600 hidden" id="error">Time is required</span>
-        </div>
-      </div>
-
-      <div className="relative z-0 w-full mb-5">
-        <input
-          type="number"
-          name="money"
-          placeholder=" "
-          className="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-        />
-        <div className="absolute top-0 left-0 mt-3 ml-1 text-gray-400">$</div>
-        <label htmlFor="money" className="absolute duration-300 top-3 left-5 -z-1 origin-0 text-gray-500">Amount</label>
-        <span className="text-sm text-red-600 hidden" id="error">Amount is required</span>
-      </div>
-
-      <div className="relative z-0 w-full mb-5">
-        <input
-          type="text"
-          name="duration"
-          placeholder=" "
-          className="pt-3 pb-2 pr-12 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-        />
-        <div className="absolute top-0 right-0 mt-3 mr-4 text-gray-400">min</div>
-        <label htmlFor="duration" className="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Duration</label>
-        <span className="text-sm text-red-600 hidden" id="error">Duration is required</span>
-      </div>
-
-      <button
-        id="button"
-        type="button"
-        onClick={toggleError}
-        className="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-pink-500 hover:bg-pink-600 hover:shadow-lg focus:outline-none"
-      >
-        Toggle Error
-      </button>
+              <span className="text-sm text-red-600 hidden" id="error">Date is required</span>
+            </div>
+          </div>
+          {/* Botón de registro */}
+          <button
+            id="button"
+            type="submit"
+            className="w-1/2 px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-gradient-to-tr from-[#5c8001] to-[#7cb518] hover:shadow-lg focus:outline-none"
+          >
+            Registrar Comida
+          </button>
     </form>
   </div>
 </div>
-    </div>
+   
   )
 }
 

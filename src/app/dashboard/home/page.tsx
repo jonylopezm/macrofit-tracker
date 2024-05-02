@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { HiOutlinePencil } from "react-icons/hi";
 import { useState, useEffect } from 'react';
 import { CaloricIntake, Profile, TodayResume } from '@/dashboard';
+import { userAgentFromString } from 'next/server';
+import { userInfo } from 'os';
 
 
 const Dashboard = () => {
@@ -35,6 +37,7 @@ const Dashboard = () => {
         console.error('Error fetching user info:', error);
       }
     };
+
 
     // Llamar a la función para obtener la información del usuario al montar el componente
     getUserInfo();

@@ -1,8 +1,8 @@
-import { NextResponse, userAgentFromString } from "next/server";
+import { NextRequest, NextResponse, userAgentFromString } from "next/server";
 import {registerUser } from '@/lib/cassandra';
 
 
-export async function POST(req: NextResponse){
+export async function POST(req: NextRequest){
     try {
         const {email, password, first_name, last_name} = await req.json();
       

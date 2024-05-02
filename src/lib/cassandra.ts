@@ -35,7 +35,6 @@ export const registerUser = async (first_name: string, last_name: string, email:
     } catch (error) {
         console.log("Error connecting to Cassandra: ", error);
     }
-
 }
 
 export const userExists = async(email:string)=>{
@@ -49,7 +48,7 @@ export const userExists = async(email:string)=>{
     } catch (error) {
         console.error('Error checking email:', error);
         throw error;
-    } 
+    }
 }
 
 export const authUser = async(email: string, password:string)=>{
@@ -104,7 +103,7 @@ export const getInfoUser = async(email: string) => {
 
     } catch (error) {
         console.log(error)
-    }
+    } 
     return null;
 }
 
@@ -124,4 +123,90 @@ export const updateProfile = async (age: number, weight: number, height: number,
         console.log("Error al actualizar la información del usuario:", error);
         return false;
     }
+    
 };
+
+export const getAllFoodData = async () => {
+    try {
+        await client.connect();
+
+        const query = "SELECT * FROM macrofit_tracker.food";
+        const result = await client.execute(query);
+
+        if (result.rowLength > 0) {
+            return result.rows;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error al obtener los datos de comida:", error);
+        throw error;
+    }
+};
+
+export const registerFoodRecord = async (
+    user_id: string,
+    food_Id: string,
+    date: Date,
+    meal_type: string,
+    quantity: number
+  ) => {
+    try {
+      await client.connect();
+        const record_id = uuidv4();
+        const query =
+          'INSERT INTO macrofit_tracker.food_record (record_id, user_id, food_id, date, meal_type, quantity) VALUES (?, ?, ?, ?, ?, ?)';
+        const params = [record_id, user_id, food_Id, date, meal_type, quantity];
+        await client.execute(query, params, { prepare: true });
+  
+        console.log('Registro de comida creado correctamente:', params);
+      
+    } catch (error) {
+      console.error('Error al conectar con Cassandra:', error);
+      throw error;
+    }
+  };
+
+  export const getFoodRecordsForUser = async (user_id: string) => {
+    try {
+        const query = 'SELECT * FROM macrofit_tracker.food_record WHERE user_id = ? ALLOW FILTERING';
+        const params = [user_id];
+        const foodRecords = await client.execute(query, params, { prepare: true });
+        return foodRecords.rows;
+    } catch (error) {
+        console.error('Error retrieving food records:', error);
+        throw error;
+    }
+}
+
+export const getFoodDetails = async (food_id: string) => {
+    try {
+      const query = 'SELECT * FROM macrofit_tracker.food WHERE food_id = ?';
+      const params = [food_id];
+      const foodDetails = await client.execute(query, params, { prepare: true });
+      return foodDetails.rows[0];
+    } catch (error) {
+      console.error('Error retrieving food details:', error);
+      throw error;
+    }
+};
+
+export const updatePassword = async (userId: string, newPassword: string) => {
+    try {
+        await client.connect();
+
+        const query = 'UPDATE macrofit_tracker.users SET password=? WHERE user_id=?';
+        const params = [newPassword, userId];
+
+        await client.execute(query, params, { prepare: true });
+
+        console.log("Contraseña del usuario actualizada correctamente.");
+        return true;
+
+    } catch (error) {
+        console.error("Error al actualizar la contraseña del usuario:", error);
+        return false;
+    }
+};
+
+
