@@ -1,7 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
+import React, { ChangeEvent, useState } from 'react'
 import { HiArrowCircleRight } from "react-icons/hi";
 import { RiMentalHealthFill } from 'react-icons/ri';
+import Swal from 'sweetalert2'
 
 
 const Register = () => {
@@ -13,6 +15,9 @@ const Register = () => {
     const [confirmPwd, setConfirmPwd] = useState("");
     const [error, setError] = useState("");
     const [pwdError, setPwdError] = useState("");
+    const [gender, setGender] = useState('hombre');
+    const router = useRouter();
+
 
     const handleSubmit = async (e: React.FormEvent) =>{
         e.preventDefault();
@@ -34,13 +39,21 @@ const Register = () => {
                     "Content-Type": "aplication/json"
                 },
                 body: JSON.stringify({
-                    first_name, last_name,email, password
+                    first_name, last_name,email, password,gender
                 })
                 
             });
 
             if(res.ok){
-                alert("usuario registrado")
+                Swal.fire({
+                    title: 'Usuario registrado correctamente',
+                    icon: 'success',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      router.push("/login");
+                    }
+                  });
+                
             }else{
                 alert("El usuario no se registro")
             }
@@ -48,11 +61,15 @@ const Register = () => {
             console.log(error)
         }
     };
+
+    const handleGenderChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setGender(e.target.value);
+      };
    
 
 
     return (
-    <div className="flex flex-col bg-gradient-to-br from-amber-800 to-cyan-900">
+    <div className="flex flex-col bg-gradient-to-br from-gray-800 to-gray-600">
        
       <div className='flex flex-row justify-start my-20 ml-20'>
         <a href="#" target="" className="flex">
@@ -63,7 +80,7 @@ const Register = () => {
       
       <div className="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-3/5 bg-white rounded-lg pt-6 mt-5 mb-20">
             <div className="w-full">
-            <h3 className="mb-3 text-4xl font-extrabold text-slate-600 text-center">Sign Up</h3>
+            <h3 className="mb-3 text-4xl font-extrabold text-slate-600 text-center">Registrate</h3>
 
                 <p className="text-slate-600 m-10 text-center">
                     Completa los siguientes campos para comenzar a usar la aplicacion.
@@ -89,14 +106,45 @@ const Register = () => {
                     </div>
 
                     <div>
+                    <fieldset className="block mb-2 text-sm text-slate-600">
+        <legend className="block mb-2 text-sm text-slate-600">Sexo</legend>
+        <div className="block pt-3 pb-2 space-x-4">
+          <label>
+            <input
+              type="radio"
+              name="radio"
+              value="hombre"
+              checked={gender === 'hombre'}
+              onChange={handleGenderChange}
+              className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+            />
+            Hombre
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="radio"
+              value="mujer"
+              checked={gender === 'mujer'} 
+              onChange={handleGenderChange}
+              className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+            />
+            Mujer
+          </label>    
+        </div>
+        <span className="text-sm text-red-600 hidden" id="error">Option has to be selected</span>
+      </fieldset>
+                    </div>
+
+                    <div>
                         <label className="block mb-2 text-sm text-slate-600">Contraseña</label>
-                        <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Enter your password" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
+                        <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Contraseña" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
                     </div>
 
                     <div>
                         <label className="block mb-2 text-sm text-slate-600">Confirme su contraseña</label>
                         {pwdError &&( <p className='text-red-500'>{pwdError}</p>   )}
-                        <input onChange={(e) => setConfirmPwd(e.target.value)} type="password" placeholder="Enter your password" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
+                        <input onChange={(e) => setConfirmPwd(e.target.value)} type="password" placeholder="Confirmar contraseña" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
                     </div>
 
                     <div className="flex mt-10 pt-14">

@@ -5,8 +5,8 @@ import Image from 'next/image'
 import { HiOutlinePencil } from "react-icons/hi";
 import { useState, useEffect } from 'react';
 import { CaloricIntake, Profile, TodayResume } from '@/dashboard';
-import { userAgentFromString } from 'next/server';
-import { userInfo } from 'os';
+import SkeletonLoader from './loadSkeleton';
+
 
 
 const Dashboard = () => {
@@ -43,8 +43,23 @@ const Dashboard = () => {
     getUserInfo();
   }, []);
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simula un tiempo de carga
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-      
+    <div>
+    {isLoading ? (
+      // Muestra el SkeletonLoader si la página está cargando
+      <SkeletonLoader />
+    ) : (
     <div className="mt-4">
 
     {/* Perfil */}
@@ -57,16 +72,9 @@ const Dashboard = () => {
     <div className="mt-4">
       <CaloricIntake userInfo={userInfo} />
     </div>
-
-    
-    {/* Resumen del dia */}
-    <div>
-      <TodayResume/>
-    </div>
-    </div>
-    
- 
-    
+    </div> 
+     )}
+     </div>  
   )
 }
 

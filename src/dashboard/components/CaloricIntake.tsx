@@ -48,14 +48,26 @@ export const CaloricIntake: React.FC<Props> = ({ userInfo }) => {
       proteins,
       carbohydrates,
     });
+
+    const valuesToSave = {
+      calories: calculatedCalories,
+      fats,
+      proteins,
+      carbohydrates,
+    };
+
+    localStorage.setItem('requiredValues', JSON.stringify(valuesToSave));
   };
 
+  
   useEffect(() => {
     // Llama a la función para calcular los valores requeridos al montar el componente
     calculateRequiredValues();
   }, [userInfo]); // Ejecuta la función cada vez que cambien los datos del usuario
 
   return (
+
+    
     <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-1">
     <div className="relative flex flex-col bg-clip-border pb-6 mb-4 rounded-xl bg-slate-50 text-gray-600 shadow-md overflow-hidden xl:col-span-2">
       <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex p-6 justify-between">

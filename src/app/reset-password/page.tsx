@@ -1,11 +1,13 @@
 "use client"
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 const ResetPasswordForm = () => {
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
+    const router = useRouter();
 
     const handleResetPassword = async (event: React.FormEvent) => {
       event.preventDefault();
@@ -27,7 +29,17 @@ const ResetPasswordForm = () => {
             });
     
             if (res.ok) {
-                console.log('Password reset email sent.');
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Cambio de Contraseña",
+                    text: "Tu contraseña ha sido actualizada",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      router.push("/login");
+                    }
+                  });
+
             } else {
                 console.error('Failed to send password reset email.');
             }

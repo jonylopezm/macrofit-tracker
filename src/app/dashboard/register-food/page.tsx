@@ -4,6 +4,7 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Food } from '@/dashboard';
+import Swal from 'sweetalert2';
 
 const RegisterFood = () => {
   const [filteredFoodData, setFilteredFoodData] = useState<Food[]>([]);
@@ -13,13 +14,12 @@ const RegisterFood = () => {
   const [mealType, setMealType] = useState('desayuno');
 
   useEffect(() => {
-    // Realiza una petición para obtener todos los datos de comida
     fetch('/api/food', {
       method: 'POST',
     })
       .then(response => response.json())
       .then(data => {
-        setFilteredFoodData(data); // Cuando se cargan los datos, inicialmente se muestran todos
+        setFilteredFoodData(data);
       })
       .catch(error => console.error('Error al obtener datos de comida:', error));
   }, []);
@@ -51,11 +51,15 @@ const RegisterFood = () => {
     try {
       // Verifica que se haya seleccionado una comida y se haya establecido una cantidad
       if (!selectedFood || quantity === undefined || !startDate) {
-        console.error('Food, quantity, or date is missing.');
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Llena todos los campos",
+        });
         return;
       }
   
-      const formattedDate = startDate.toISOString().split('T')[0]; // Formatea la fecha en formato yyyy-mm-dd
+      const formattedDate = startDate.toISOString().split('T')[0]; // formato yyyy-mm-dd
   
       const res = await fetch('/api/newfood', {
         method: "POST",
@@ -72,7 +76,11 @@ const RegisterFood = () => {
       });
   
       if (res.ok) {
-        console.log('Food record created.');
+        Swal.fire({
+          icon: "success",
+          title: "Registro de comida",
+          text: "Comida registrada",
+        });
 
       } else {
         console.error('Error creating food record.');
@@ -83,24 +91,23 @@ const RegisterFood = () => {
     }
   };
   
-
   return (
     
-  <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-1 bg-gradient-to-t rounded-xl bg-slate-50 text-gray-600">
-  <div className="mx-auto max-w-full w-screen px-6 py-12 bg-white border-0 shadow-lg sm:rounded-3xl">
-    <h1 className="text-2xl font-bold mb-8">Registrar alimento</h1>
+  <div className="mb-4 mt-4 grid grid-cols-1 gap-6 xl:grid-cols-1 bg-gradient-to-t rounded-xl bg-slate-50 text-gray-600">
+  <div className="max-w-full px-6 py-12 bg-white border-0 shadow-lg sm:rounded-3xl m-4">
+    <h1 className="text-3xl font-bold mb-8">Registrar alimento</h1>
     <form onSubmit={handleSubmit} >
       {/*Tiempo de comida */}
       <fieldset className="relative z-0 w-full p-px mb-5">
         <legend className="absolute text-gray-500 transform -top-3 origin-0">Tiempo de comida</legend>
-        <div className="block pt-3 pb-2 space-x-4">
+        <div className="block pt-3 pb-2 space-x-4 mt-4">
           <label>
             <input
               type="radio"
               name="radio"
               value="desayuno"
-              checked={mealType === 'desayuno'} // Marca como seleccionado si el valor del estado es '1'
-              onChange={handleMealTypeChange} // Maneja el cambio de valor
+              checked={mealType === 'desayuno'}
+              onChange={handleMealTypeChange} 
               className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
             />
             Desayuno
@@ -110,8 +117,8 @@ const RegisterFood = () => {
               type="radio"
               name="radio"
               value="almuerzo"
-              checked={mealType === 'almuerzo'} // Marca como seleccionado si el valor del estado es '1'
-              onChange={handleMealTypeChange} // Maneja el cambio de valor
+              checked={mealType === 'almuerzo'}
+              onChange={handleMealTypeChange}
               className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
             />
             Almuerzo
@@ -121,8 +128,8 @@ const RegisterFood = () => {
               type="radio"
               name="radio"
               value="cena"
-              checked={mealType === 'cena'} // Marca como seleccionado si el valor del estado es '1'
-              onChange={handleMealTypeChange} // Maneja el cambio de valor
+              checked={mealType === 'cena'}
+              onChange={handleMealTypeChange}
               className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
             />
             Cena
@@ -132,8 +139,8 @@ const RegisterFood = () => {
               type="radio"
               name="radio"
               value="snack"
-              checked={mealType === 'snack'} // Marca como seleccionado si el valor del estado es '1'
-              onChange={handleMealTypeChange} // Maneja el cambio de valor
+              checked={mealType === 'snack'} 
+              onChange={handleMealTypeChange} 
               className="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
             />
             Snack

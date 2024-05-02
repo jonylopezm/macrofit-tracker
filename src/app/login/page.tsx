@@ -2,10 +2,9 @@
 import { RiMentalHealthFill } from 'react-icons/ri';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { userInfo } from 'os';
 
 const Login = () => {
-  
+
   const [email, setEmail]= useState("");
   const [password, setPassword]= useState("");
   const [error, setError]= useState("");
@@ -43,7 +42,7 @@ const Login = () => {
   }
 
   return (
-    <div className="flex flex-col bg-gradient-to-br from-green-900 to-yellow-700">
+    <div className="flex flex-col bg-gradient-to-br from-blue-600 to-blue-400 h-screen">
       <div className='flex flex-row lg:justify-start my-20 ml-20 sm:justify-center'>
         <a href="#" target="" className="flex">
           <RiMentalHealthFill  className="w-12 h-12 m-1 fill-white" />
@@ -56,7 +55,7 @@ const Login = () => {
             <div className="flex items-center">
               <form onSubmit={handleSubmit} className="flex flex-col w-full h-full pb-4 text-center rounded-3xl">
                 
-                <h3 className="mb-3 text-4xl font-extrabold  text-slate-600">Sign In</h3>
+                <h3 className="mb-3 text-4xl font-extrabold  text-slate-600">Iniciar Sesión</h3>
                 <p className="mb-4  text-slate-600">Ingresa tu correo y contraseña</p>
                 <div className="flex items-center mb-3">
                   <hr className="h-0 border-b border-solid border-slate-600/35 grow" />

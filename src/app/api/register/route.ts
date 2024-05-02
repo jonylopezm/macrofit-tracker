@@ -4,9 +4,9 @@ import {registerUser } from '@/lib/cassandra';
 
 export async function POST(req: NextRequest){
     try {
-        const {email, password, first_name, last_name} = await req.json();
+        const {email, password, first_name, last_name, gender} = await req.json();
       
-        await registerUser(first_name, last_name, email, password)
+        await registerUser(first_name, last_name, email, password, gender)
         
         return NextResponse.json({message: "User registered."}, {status:201});
     } catch (error) {
