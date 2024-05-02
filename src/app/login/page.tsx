@@ -82,7 +82,7 @@ const Login = () => {
 
                 
                 <div className="flex flex-row justify-between mb-8">
-                  <a href="/reset-password" className="mr-4 text-sm font-medium text-[#fbb02d] ">Olvidó su contraseña?</a>
+                  <a href="/forgot-password" className="mr-4 text-sm font-medium text-[#fbb02d] ">Olvidó su contraseña?</a>
                 </div>
                 <button
                   type="submit"     

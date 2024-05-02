@@ -2,10 +2,13 @@
 import React, { useState } from 'react'
 import { Footer } from '@/components/Footer';
 import { Resend } from 'resend';
+import { SimpleUser } from '@/dashboard/interfaces/simple-user';
 
 const ForgotPasswordForm = () => {
   
   const [email, setEmail] = useState('');
+  const [userInfo, setUserInfo] = useState<SimpleUser | null>(null);
+  
 
   const handleResetPassword = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -16,11 +19,16 @@ const ForgotPasswordForm = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email }) // Enviar la dirección de correo electrónico al backend
+            body: JSON.stringify({ email })
         });
 
         if (res.ok) {
             console.log('Password reset email sent.');
+            alert("Se ha enviado un correo a " + email)
+            const data = await res.json();
+            setUserInfo(data);
+            localStorage.setItem("requser_id", data.user_id)
+            console.log(data.user_id);
         } else {
             console.error('Failed to send password reset email.');
         }

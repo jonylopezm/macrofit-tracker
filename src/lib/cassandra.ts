@@ -2,7 +2,6 @@ import  {Client, auth} from 'cassandra-driver';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
-
 const cloud = { secureConnectBundle: `${process.env.SECURE_BUNDLE_PATH}` };
 const authProvider = new auth.PlainTextAuthProvider('token', `${process.env.ASTRA_DB_APPLICATION_TOKEN}`);
 export const client = new Client({ cloud, authProvider });
@@ -191,16 +190,17 @@ export const getFoodDetails = async (food_id: string) => {
     }
 };
 
-export const updatePassword = async (userId: string, newPassword: string) => {
+export const updatePassword = async ( user_id: string, newPassword: string) => {
     try {
         await client.connect();
-
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
         const query = 'UPDATE macrofit_tracker.users SET password=? WHERE user_id=?';
-        const params = [newPassword, userId];
+        const params = [hashedPassword, user_id];
 
         await client.execute(query, params, { prepare: true });
 
-        console.log("Contraseña del usuario actualizada correctamente.");
+        console.log("Contraseña del usuario actualizada correctamente.", newPassword, hashedPassword);
         return true;
 
     } catch (error) {

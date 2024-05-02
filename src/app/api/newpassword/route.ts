@@ -4,12 +4,14 @@ import { updatePassword } from '@/lib/cassandra';
 export async function POST(req: NextRequest) {
     try {
         // Obtiene los datos de la solicitud
-        const { user_id, password } = await req.json();
+        const { password } = await req.json();
+        const user_id = req.headers.get("X-User-Id");
+        console.log(user_id);
 
         // Verifica si el user_id es una cadena válida
         if (typeof user_id === "string") {
             // Actualiza la contraseña del usuario en la base de datos
-            await updatePassword(user_id, password);
+            await updatePassword(user_id, password );
             
             // Retorna una respuesta exitosa
             return NextResponse.json({ message: "Password updated." }, { status: 200 });
