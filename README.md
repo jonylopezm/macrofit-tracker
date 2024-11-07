@@ -1,5 +1,5 @@
-##Configuracion de la Base de Datos
-###Creada en Datastax by Astra DB
+## Configuracion de la Base de Datos
+### Creada en Datastax by Astra DB
 https://www.datastax.com/products/datastax-astra
 
 Crea una cuenta para poder hacer una base de datos
@@ -9,7 +9,7 @@ Crea una cuenta para poder hacer una base de datos
 • En la pestaña de Data Exploreren el dashboard de la BD, crear un nuevo keyspace con el nombre macrofit_tracker y click en create keyspace
 • Creado el nuevo keyspace, se van al boton CQL Console e ingresan los siguientes comandos y scripts para crear la base de datos.
 
-###Script de la base de datos:
+### Script de la base de datos:
 
 1. Usar el keyspace creado con el comando:
    USE macrofit_tracker;
@@ -66,7 +66,7 @@ SECURE_BUNDLE_PATH=secure-connect-macrofit-trackerdb.zip (Este archivo lo descar
 JWT:
 JWT_SECRET="mi_clave_secreta_123"(su propia clave secreta)
 
-###Ejecutar el proyecto:
+### Ejecutar el proyecto:
 • Ejecutan npm install en vs code, para intalar las dependencias
 • Ejecutan el comando npm fix --force para solucionar los errores
 • Ejecutan npm run dev
