@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { FoodRecord } from '@/dashboard/interfaces/food_record';
 import { Food } from '@/dashboard/interfaces/food';
 import SkeletonLoader from './skeletonLoader';
+import * as XLSX from 'xlsx';
+const { read, utils } = XLSX;
 
 
 export const TodayResume: React.FC = () => {
@@ -81,12 +83,14 @@ export const TodayResume: React.FC = () => {
     let totalFats = 0;
     let totalProteins = 0;
     let totalCarbohydrates = 0;
+    let daterecord;
 
     foodRecords.forEach((record) => {
       totalCalories += record.details.calories;
       totalFats += record.details.fats;
       totalProteins += record.details.proteins;
       totalCarbohydrates += record.details.carbohydrates;
+      daterecord = record.date;
     });
 
     return {
@@ -94,6 +98,7 @@ export const TodayResume: React.FC = () => {
       totalFats,
       totalProteins,
       totalCarbohydrates,
+      daterecord,
     };
   };
 
@@ -103,6 +108,7 @@ export const TodayResume: React.FC = () => {
     totalFats,
     totalProteins,
     totalCarbohydrates,
+    daterecord,
   } = calculateTotalValues();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -115,6 +121,26 @@ export const TodayResume: React.FC = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const exportToExcel = () => {
+    const data = foodRecords.map((record) => ({
+      Fecha: record.date,
+      Alimento: record.details.name,
+      Calorías: record.details.calories,
+      Proteínas: record.details.proteins,
+      Grasas: record.details.fats,
+      Carbohidratos: record.details.carbohydrates,
+      Porción: `${record.quantity} ${record.details.serving_size_units}`,
+    }));
+
+    // Crear hoja de trabajo y libro
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Resumen de Hoy");
+
+    // Exportar archivo
+    XLSX.writeFile(workbook, `ResumenDeHoy_${daterecord}.xlsx`);
+  };
 
   return (
     <div>
@@ -131,6 +157,13 @@ export const TodayResume: React.FC = () => {
           <div className="w-3/4 ml-5 my-5">
             <h2 className="text-5xl text-gray-600 font-bold text-start">Resumen de Hoy</h2>
           </div>
+          <button
+                  onClick={exportToExcel}
+                  className="bg-green-500 text-white px-4 py-2 rounded shadow"
+                >
+                  Exportar a Excel
+                </button>
+
           <button className="bg-gray-200 p-1 border rounded-md shadow-md bg-gradient-to-tr from-blue-600 to-blue-400 text-white">
             <a href="/dashboard/register-food">Registrar comida</a>
           </button>
@@ -142,25 +175,26 @@ export const TodayResume: React.FC = () => {
         <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-600 shadow-none m-0 flex-col items-center justify-between p-6">
         <h2 className="text-3xl text-gray-600 font-bold text-start">Progreso del Dia</h2>
           <div>
-            <h3>Calorías</h3>
+            <h3>Calorías: {totalCalories.toPrecision(3)} cal</h3>
             <div className="bg-gray-200 h-4 rounded-full">
               <div className=" bg-gradient-to-r from from-blue-300 to-blue-500 h-4 rounded-full" style={{ width: `${(totalCalories / requiredValues.calories) * 100}%` }}></div>
             </div>
           </div>
           <div>
-            <h3>Grasas</h3>
+            <h3>Grasas: {totalFats.toPrecision(3)}g</h3>
             <div className="bg-gray-200 h-4 rounded-full">
               <div className="bg-gradient-to-r from from-yellow-300 to-yellow-500 rounded-full h-4" style={{ width: `${(totalFats / requiredValues.fats) * 100}%` }}></div>
             </div>
           </div>
           <div>
-            <h3>Proteínas</h3>
-            <div className="bg-gray-200 h-4 rounded-full">
+            <h3>Proteínas: {totalProteins.toPrecision(3)}g</h3>
+            <div className="bg-gray-200 h-4 rounded-full justify-between">
               <div className="bg-gradient-to-r from from-green-300 to-green-500 rounded-full h-4" style={{ width: `${(totalProteins / requiredValues.proteins) * 100}%` }}></div>
+             
             </div>
           </div>
           <div>
-            <h3>Carbohidratos</h3>
+            <h3>Carbohidratos: {totalCarbohydrates.toPrecision(3)}g</h3>
             <div className="bg-gray-200 rounded-full h-4">
               <div className="bg-gradient-to-r from from-red-300 to-red-500 rounded-full h-4" style={{ width: `${(totalCarbohydrates / requiredValues.carbohydrates) * 100}%` }}></div>
             </div>
@@ -215,7 +249,7 @@ export const TodayResume: React.FC = () => {
                         <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">{record.details.carbohydrates}</p>
                       </td>
                       <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">{record.details.serving_size} {record.details.serving_size_units}</p>
+                        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">{record.quantity} {record.details.serving_size_units}</p>
                       </td>
                     </tr>
                   );
