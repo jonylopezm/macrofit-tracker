@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Configuracion de la Base de Datos
+### Creada en Datastax by Astra DB
 
-## Getting Started
+https://www.datastax.com/products/datastax-astra
 
-First, run the development server:
+Crea una cuenta para poder hacer una base de datos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+• Una vez creada la cuenta, en la barra de opciones selecciona Databases, y busca el boton Create Database.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+• Crean la base de datos con el nombre macrofit_trackerDB, el provider seleccionan Google Cloud, y la region us-esast que es la unica que aparece
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+• Una vez creada encienden la base de datos
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+• En la pestaña de Data Exploreren el dashboard de la BD, crear un nuevo keyspace con el nombre macrofit_tracker y click en create keyspace
 
-## Learn More
+• Creado el nuevo keyspace, se van al boton CQL Console e ingresan los siguientes comandos y scripts para crear la base de datos.
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Script de la base de datos:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Usar el keyspace creado con el comando:
+   USE macrofit_tracker;
 
-## Deploy on Vercel
+2.Agregar las tablas a la base de datos:
+CREATE TABLE IF NOT EXISTS users (
+  user_id TEXT,
+  email TEXT,
+  password TEXT,
+  first_name TEXT,
+  last_name TEXT,
+  age INT,
+  weight DOUBLE,
+  height DOUBLE,
+  activity_level TEXT,
+  daily_caloric_intake DOUBLE,
+  gender TEXT,
+  PRIMARY KEY (user_id)
+);
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+CREATE TABLE IF NOT EXISTS food (
+  food_id TEXT,
+  name TEXT,
+  serving_size DOUBLE,
+  serving_size_units TEXT,
+  serving_type TEXT,
+  calories DOUBLE,
+  proteins DOUBLE,
+  carbohydrates DOUBLE,
+  fats DOUBLE,
+  PRIMARY KEY (food_id)
+);
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+CREATE TABLE IF NOT EXISTS food_record (
+  record_id TEXT,
+  user_id TEXT,
+  food_id TEXT,
+  date DATE,
+  meal_type TEXT,
+  quantity DOUBLE,
+  PRIMARY KEY (record_id)
+);
+
+## Archivo .ENV
+
+Este archivo contiene lo siguiente:
+
+ASTRA_DB_ID=(Coloque el ID de google Cloud que aparece en la pestaña overview de la base de datos)
+
+ASTRA_DB_REGION=us-east1 (la region de su base de datos)
+
+ASTRA_DB_KEYSPACE=macrofit_tracker (este es el nombre del keyspace creado anteriormente)
+
+ASTRA_DB_APPLICATION_TOKEN=AstraCS:nJdHmDHPPGZqPwEuWHAMPYOh:936a1254fb6c58f29328498cdd4cca6b15aec4dd1f8d2077c023b029b63ae103 (arriba del id de google cloud presiona el boton generate token, lo copian aqui)
+
+SECURE_BUNDLE_PATH=secure-connect-macrofit-trackerdb.zip (Este archivo lo descargan al darle click a los 3 puntitos en donde esta el GoogleCloud ID, y hacen click en Download CSB, el archivo lo descargan y lo colocan dentro de la carpeta del proyecto, copian el nombre y lo pegan aqui)
+
+
+JWT:
+JWT_SECRET="mi_clave_secreta_123"(su propia clave secreta)
+
+### Ejecutar el proyecto:
+
+• Ejecutan npm install en vs code, para intalar las dependencias
+
+• Ejecutan el comando npm fix --force para solucionar los errores
+
+• Ejecutan npm run dev
+
+• Disfrute el programa
+
+
