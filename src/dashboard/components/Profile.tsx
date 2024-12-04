@@ -19,7 +19,7 @@ export const Profile: React.FC<Props> = ({ userInfo }) => {
       <div className="relative flex flex-col bg-clip-border pb-6 mb-4 rounded-xl bg-slate-50 text-gray-600 shadow-md overflow-hidden xl:col-span-2">
         <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex p-6 justify-between">
           <Image
-            src="https://mighty.tools/mockmind-api/content/human/65.jpg"
+            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
             width={150}
             height={150}
             alt=""
@@ -27,7 +27,7 @@ export const Profile: React.FC<Props> = ({ userInfo }) => {
           />
           <div className="w-3/4 ml-5">
             <h2 className="text-xl font-medium ">Perfil</h2>
-            <h2 className="text-5xl text-gray-600 font-bold">
+            <h2 className="text-2xl text-gray-600 font-bold">
               {userInfo?.first_name} {userInfo?.last_name}
             </h2>
           </div>
@@ -61,7 +61,7 @@ export const Profile: React.FC<Props> = ({ userInfo }) => {
           </div>  
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-end text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-4xl font-light text-white/60 ">Metros</strong>
+              <strong className="text-2xl font-light text-white/60 ">Metros</strong>
             </p>
           </div>       
         </div>
@@ -74,7 +74,7 @@ export const Profile: React.FC<Props> = ({ userInfo }) => {
           </div>  
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-end text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-4xl font-light text-white/60 ">Lbs</strong>
+              <strong className="text-2xl font-light text-white/60 ">Lbs</strong>
             </p>
           </div>       
         </div>
@@ -87,7 +87,7 @@ export const Profile: React.FC<Props> = ({ userInfo }) => {
           </div>  
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-end text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-4xl font-light text-white/60 ">Años</strong>
+              <strong className="text-2xl font-light text-white/60 ">Años</strong>
             </p>
           </div>       
         </div>
@@ -100,7 +100,7 @@ export const Profile: React.FC<Props> = ({ userInfo }) => {
           </div>  
           <div className="border-t border-blue-gray-50 p-4">
             <p className="block antialiased font-sans text-end text-base leading-relaxed font-normal text-blue-gray-600">
-              <strong className="text-4xl font-light text-white/60 ">Sexo</strong>
+              <strong className="text-2xl font-light text-white/60 ">Sexo</strong>
             </p>
           </div>       
         </div> 

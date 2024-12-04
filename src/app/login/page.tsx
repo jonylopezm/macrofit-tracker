@@ -43,13 +43,13 @@ const Login = () => {
 
   return (
     <div className="flex flex-col bg-gradient-to-br from-blue-600 to-blue-400 h-screen">
-      <div className='flex flex-row lg:justify-start my-20 ml-20 sm:justify-center'>
+      <div className='flex flex-row lg:justify-start mt-10 ml-20 sm:justify-center'>
         <a href="#" target="" className="flex">
           <RiMentalHealthFill  className="w-12 h-12 m-1 fill-white" />
-          <span className="self-center lg:text-6xl sm:text-2xl text-white font-semibold whitespace-nowrap ">Macrofit Tracker</span>
+          <span className="self-center lg:text-2xl sm:text-2xl text-white font-semibold whitespace-nowrap ">Macrofit Tracker</span>
         </a>
       </div>
-      <div className="flex flex-col mx-auto bg-white text-slate-600 rounded-lg pt-6 mt-5 mb-20 px-8 lg:px-1">
+      <div className="flex flex-col mx-auto bg-white text-slate-600 rounded-lg pt-4 mt-5 mb-20 px-8 lg:px-1">
         <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
           <div className="flex items-center justify-center w-full lg:p-12">
             <div className="flex items-center">
@@ -87,7 +87,7 @@ const Login = () => {
                   type="submit"     
                   className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none  text-slate-600 transition duration-300 md:w-96 rounded-2xl hover:bg-[#fb6107] focus:ring-4 focus:ring-purple-blue-100 bg-[#fbb02d]"
                 >
-                  <a href="#">Sign In</a>
+                  <a href="#">Iniciar Sesion</a>
                 </button>
                 <p className="text-sm leading-relaxed  text-slate-600">No estas registrado aún? <a href="/register" className="font-bold  text-slate-600">Create an Account</a></p>
                 

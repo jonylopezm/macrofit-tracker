@@ -72,7 +72,7 @@ export const CaloricIntake: React.FC<Props> = ({ userInfo }) => {
     <div className="relative flex flex-col bg-clip-border pb-6 mb-4 rounded-xl bg-slate-50 text-gray-600 shadow-md overflow-hidden xl:col-span-2">
       <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex p-6 justify-between">
         <div className=' w-3/4 ml-5 my-5'>
-          <h2 className='text-5xl text-gray-600 font-bold text-center'>Tu requerimiento calórico Diario</h2>
+          <h2 className='text-2xl text-gray-600 font-bold text-left'>Tu requerimiento calórico Diario</h2>
         </div>
        
       </div>

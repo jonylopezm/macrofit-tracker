@@ -9,6 +9,8 @@ const { read, utils } = XLSX;
 
 export const TodayResume: React.FC = () => {
   const [foodRecords, setFoodRecords] = useState<FoodRecord[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]); // Fecha actual
+  const [filteredRecords, setFilteredRecords] = useState<FoodRecord[]>([]); // Especifica el tipo
 
   const [requiredValues, setRequiredValues] = useState({
     calories: 0,
@@ -85,7 +87,7 @@ export const TodayResume: React.FC = () => {
     let totalCarbohydrates = 0;
     let daterecord;
 
-    foodRecords.forEach((record) => {
+    filteredRecords.forEach((record) => {
       totalCalories += record.details.calories;
       totalFats += record.details.fats;
       totalProteins += record.details.proteins;
@@ -122,8 +124,17 @@ export const TodayResume: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const filtered = foodRecords.filter((record) => {
+      const recordDate = record.date.toString(); // Convertir a YYYY-MM-DD
+      console.log("Registro: " + recordDate + " Hoy: " + selectedDate);
+      return recordDate === selectedDate; // Comparar cadenas
+    });
+    setFilteredRecords(filtered);
+  }, [foodRecords, selectedDate]);
+
   const exportToExcel = () => {
-    const data = foodRecords.map((record) => ({
+    const data = filteredRecords.map((record) => ({
       Fecha: record.date,
       Alimento: record.details.name,
       Calorías: record.details.calories,
@@ -153,13 +164,13 @@ export const TodayResume: React.FC = () => {
       <div className="mb-4 mt-4 grid grid-cols-1 gap-6 xl:grid-cols-1 bg-gradient-to-t rounded-xl bg-slate-50 text-gray-600">
     
 
-        <div className=" w-full relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-600 shadow-none m-0 flex items-center justify-between p-6">
+        <div className=" w-full relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-600 shadow-none m-0 flex items-center justify-between">
           <div className="w-3/4 ml-5 my-5">
-            <h2 className="text-5xl text-gray-600 font-bold text-start">Resumen de Hoy</h2>
+            <h2 className="text-4xl text-gray-600 font-bold text-start">Resumen de Comidas</h2>
           </div>
           <button
                   onClick={exportToExcel}
-                  className="bg-green-500 text-white px-4 py-2 rounded shadow"
+                  className="bg-green-500 p-1 border rounded-md shadow-md bg-gradient-to-tr from-green-600 to-green-400 text-white m-2"
                 >
                   Exportar a Excel
                 </button>
@@ -168,8 +179,25 @@ export const TodayResume: React.FC = () => {
             <a href="/dashboard/register-food">Registrar comida</a>
           </button>
         </div>
-        <div className="relative flex flex-col bg-clip-border pb-6 rounded-xl m-9 bg-white text-gray-900 shadow-md overflow-hidden xl:col-span-2">
+    
+
+          <div className="relative flex flex-col bg-clip-border bg-white text-gray-900 shadow-md overflow-hidden xl:col-span-2">
+          <div className="m-2">
+            <label htmlFor="date-picker" className="mr-2">
+              Selecciona una fecha:
+            </label>
+            <input
+              id="date-picker"
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="p-2 border rounded"
+            />
+          </div>
+          </div>
+        <div className="relative flex flex-col bg-clip-border pb-6 rounded-xl bg-white text-gray-900 shadow-md overflow-hidden xl:col-span-2">
         
+         
          {/*Barras de progreso */}
          
         <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-600 shadow-none m-0 flex-col items-center justify-between p-6">
@@ -228,7 +256,7 @@ export const TodayResume: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {foodRecords.map((record) => {
+                {filteredRecords.map((record) => {
                   return (
                     <tr key={record.food_id}>
                       <td className="py-3 px-5 border-b border-blue-gray-50">

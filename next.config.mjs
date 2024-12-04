@@ -17,6 +17,10 @@ const nextConfig = {
                 {protocol: "https",
                 hostname: "mighty.tools",
                 },
+
+                {protocol: "https",
+                    hostname: "cdn.pixabay.com",
+                    },
         ]
     }
 };

@@ -10,8 +10,8 @@ const RegisterFood = () => {
   const [filteredFoodData, setFilteredFoodData] = useState<Food[]>([]);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [quantity, setQuantity] = useState<number | undefined>(undefined);
-  const [startDate, setStartDate] = useState<Date | null>(null);
   const [mealType, setMealType] = useState('desayuno');
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]); 
 
   useEffect(() => {
     fetch('/api/food', {
@@ -24,9 +24,7 @@ const RegisterFood = () => {
       .catch(error => console.error('Error al obtener datos de comida:', error));
   }, []);
 
-  const handleDateChange = (date: Date | null) => {
-    setStartDate(date);
-  };
+
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedFoodId = e.target.value;
@@ -50,7 +48,7 @@ const RegisterFood = () => {
 
     try {
       // Verifica que se haya seleccionado una comida y se haya establecido una cantidad
-      if (!selectedFood || quantity === undefined || !startDate) {
+      if (!selectedFood || quantity === undefined || !selectedDate) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -59,7 +57,6 @@ const RegisterFood = () => {
         return;
       }
   
-      const formattedDate = startDate.toISOString().split('T')[0]; // formato yyyy-mm-dd
   
       const res = await fetch('/api/newfood', {
         method: "POST",
@@ -69,7 +66,7 @@ const RegisterFood = () => {
         body: JSON.stringify({
           user_id: localStorage.getItem("user_id"),
           food_id: selectedFood.food_id,
-          date: formattedDate,
+          date: selectedDate,
           meal_type: mealType,
           quantity: quantity,
         })
@@ -186,20 +183,19 @@ const RegisterFood = () => {
             )}
           </div>
           {/* Fecha */}
-          <div className="flex flex-row space-x-4">
-            <div className="relative z-0 w-full mb-5">
-              <DatePicker
-                selected={startDate}
-                onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy"
-                placeholderText="Cambiar la fecha"
-                className="pt-3 pb-2 w-full px-0 mt-0 bg-white border-0 border-b-2 focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                calendarClassName="absolute block bg-white shadow-md border border-gray-800"
-                shouldCloseOnSelect={false}
-              />
-              <span className="text-sm text-red-600 hidden" id="error">Date is required</span>
-            </div>
+          <div className="m-2">
+            <label htmlFor="date-picker" className="mr-2">
+              Selecciona una fecha:
+            </label>
+            <input
+              id="date-picker"
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="p-2 border rounded"
+            />
           </div>
+         
           {/* Botón de registro */}
           <button
             id="button"

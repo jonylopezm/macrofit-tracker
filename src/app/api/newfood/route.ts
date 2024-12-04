@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const { user_id, food_id, date, meal_type, quantity } = await req.json();
 
-    await registerFoodRecord(user_id, food_id, new Date(date), meal_type, quantity);
+    await registerFoodRecord(user_id, food_id, date, meal_type, quantity);
 
     return NextResponse.json({ message: 'Food record created.' }, { status: 201 });
   } catch (error) {

@@ -41,21 +41,6 @@ const StartPage = async () => {
         </div>
       </div>
 
-      {/* <div className="grid lg:grid-cols-2 xl:grid-cols-4 grid-cols-1 bg-white pt-10 pb-36 text-end justify-between">
-        <div className="grid ml-10 text-[#5c8001] text-7xl font-bold hover:text-slate-800 transition-color duration-300">
-          <p>Carbohidratos</p>
-        </div>
-        <div className="grid text-[#00a5cf] text-7xl font-bold  hover:text-slate-800 transition-color duration-300">
-          <p>Proteinas</p>
-        </div>
-        <div className="grid text-[#fbb02d] text-7xl font-bold hover:text-slate-800 transition-color duration-300">    
-          <p>Grasas</p>    
-        </div>
-        <div className="grid mr-10 text-[#fb6107] text-7xl font-bold hover:text-slate-800 transition-color duration-300">
-          <p>Calorias</p>
-        </div>
-      </div> */}
-
 <div className="flex justify-center lg:justify-center xl:justify-center items-center bg-white pt-10 pb-36 gap-6 flex-wrap">
     <div className="inline-grid ml-10 text-[#5c8001] text-7xl font-bold hover:text-slate-800 transition-color duration-300 justify-items-center">
         <p>Carbohidratos</p>

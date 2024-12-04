@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS food_record (
   record_id TEXT,
   user_id TEXT,
   food_id TEXT,
-  date DATE,
+  date TEXT,
   meal_type TEXT,
   quantity DOUBLE,
   PRIMARY KEY (record_id)

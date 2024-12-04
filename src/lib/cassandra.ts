@@ -146,7 +146,7 @@ export const getAllFoodData = async () => {
 export const registerFoodRecord = async (
     user_id: string,
     food_Id: string,
-    date: Date,
+    date: string,
     meal_type: string,
     quantity: number
   ) => {
