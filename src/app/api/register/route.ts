@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse, userAgentFromString } from "next/server";
 import {registerUser } from '@/lib/cassandra';
+import { newUserEmail } from "@/lib/resend";
 
 
 export async function POST(req: NextRequest){
@@ -7,7 +8,8 @@ export async function POST(req: NextRequest){
         const {email, password, first_name, last_name, gender} = await req.json();
       
         await registerUser(first_name, last_name, email, password, gender)
-        
+
+        await newUserEmail(email);
         return NextResponse.json({message: "User registered."}, {status:201});
     } catch (error) {
         return NextResponse.json(

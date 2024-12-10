@@ -150,7 +150,7 @@ export const TodayResume: React.FC = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Resumen de Hoy");
 
     // Exportar archivo
-    XLSX.writeFile(workbook, `ResumenDeHoy_${daterecord}.xlsx`);
+    XLSX.writeFile(workbook, `Resumen_${daterecord}.xlsx`);
   };
 
   return (
