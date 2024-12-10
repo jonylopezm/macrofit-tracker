@@ -166,6 +166,50 @@ export const registerFoodRecord = async (
     }
   };
 
+  export const registerFoodRecipe = async (
+   
+    name : string,
+    serving_size : number,
+    serving_size_units : string,
+    serving_type : string,
+    calories : number,
+    proteins : number,
+    carbohydrates : number,
+    fats : number,
+
+  ) => {
+    try {
+      await client.connect();
+        const food_id = uuidv4();
+        const query = `
+        INSERT INTO macrofit_tracker.food (
+          food_id, name, serving_size, serving_size_units, serving_type, calories, proteins, carbohydrates, fats
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `;
+  
+      const params = [
+        food_id,
+        name,
+        serving_size,
+        serving_size_units,
+        serving_type,
+        calories,
+        proteins,
+        carbohydrates,
+        fats,
+      ];
+  
+      await client.execute(query, params, { prepare: true });
+  
+      console.log('Registro de alimento creado correctamente:', params);
+    } catch (error) {
+      console.error('Error al conectar con Cassandra o al insertar registro:', error);
+      throw error;
+    } finally {
+      await client.shutdown();
+    }
+  };
+
   export const getFoodRecordsForUser = async (user_id: string) => {
     try {
         const query = 'SELECT * FROM macrofit_tracker.food_record WHERE user_id = ? ALLOW FILTERING';
