@@ -9,8 +9,8 @@ export const sendPasswordResetEmail = async (email : string) => {
             port: 587, // Puerto estándar para SMTP con STARTTLS
             secure: false, // false para STARTTLS
             auth: {
-                user: 'jonslopez06@gmail.com', // Tu correo electrónico
-                pass: 'lwkf alkw zafl zaur', // Tu contraseña o token de aplicación
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
             },
         });
     

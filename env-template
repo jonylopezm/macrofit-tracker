@@ -6,3 +6,7 @@ SECURE_BUNDLE_PATH=secure-connect-macrofit-trackerdb.zip
 
 JWT:
 JWT_SECRET="mi_clave_secreta_123"
+
+Nodemailer:
+EMAIL_USER=tu-email@gmail.com
+EMAIL_PASS=tu-contraseña
