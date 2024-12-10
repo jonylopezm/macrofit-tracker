@@ -15,16 +15,23 @@ export const CaloricIntake: React.FC<Props> = ({ userInfo }) => {
     proteins: 0,
   });
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   // Función para calcular los valores requeridos
   const calculateRequiredValues = () => {
-    // Realiza los cálculos aquí utilizando los datos del usuario (userInfo)
-    // Ejemplo de cálculos ficticios, debes ajustarlos según la fórmula que desees utilizar
+    
     const userWeight = userInfo?.weight || 0;
     const userHeight = userInfo?.height || 0;
     const userAge = userInfo?.age || 0;
-    const userGender = userInfo?.gender || 'hombre'; // Asumiendo que el género predeterminado es masculino
+    const userGender = userInfo?.gender || 'hombre';
 
-    // Realiza el cálculo del requerimiento calórico diario según la fórmula que desees
+    if (userWeight === 0 || userHeight === 0 || userAge === 0) {
+      setErrorMessage(
+        'Por favor, actualiza tus datos para calcular tu requerimiento calórico diario.'
+      );
+      return;
+    }
+
     let calculatedCalories = 0;
     if (userGender === 'hombre') {
       calculatedCalories = 10 * userWeight + 6.25 * userHeight - 5 * userAge + 5;
@@ -75,7 +82,17 @@ export const CaloricIntake: React.FC<Props> = ({ userInfo }) => {
           <h2 className='text-2xl text-gray-600 font-bold text-left'>Tu requerimiento calórico Diario</h2>
         </div>
        
+        {errorMessage && (
+            <div className=" bg-red-700 text-white rounded-md p-2">
+              {errorMessage}{' '}
+              <a href="/dashboard/user-profile" className="text-white underline">
+                Ir a tu perfil
+              </a>
+            </div>
+          )}
       </div>
+
+     
       <div className='grid gap-y-10 gap-x-6 mx-10 md:grid-cols-2 xl:grid-cols-4'>
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md items-center">
           <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#f3de2c] to-[#fb6107] text-white shadow-blue-500/40 shadow-lg absolute -mt-4 grid h-16 w-32 place-items-center">

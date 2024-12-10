@@ -16,11 +16,17 @@ const Register = () => {
     const [error, setError] = useState("");
     const [pwdError, setPwdError] = useState("");
     const [gender, setGender] = useState('hombre');
+    const [termsAccepted, setTermsAccepted] = useState(false);
     const router = useRouter();
 
 
     const handleSubmit = async (e: React.FormEvent) =>{
         e.preventDefault();
+
+        if (!termsAccepted) {
+            setError("Debes aceptar los términos y condiciones para registrarte.");
+            return;
+        }
 
         if(!first_name || !email || !password || !last_name){
             setError("Llena todos los campos");
@@ -71,14 +77,14 @@ const Register = () => {
     return (
     <div className="flex flex-col bg-gradient-to-br from-gray-800 to-gray-600">
        
-      <div className='flex flex-row justify-start my-20 ml-20'>
-        <a href="#" target="" className="flex">
+      <div className='flex flex-row justify-start mt-10 mb-5 ml-20'>
+        <a href="/startpage" target="" className="flex">
                 <RiMentalHealthFill  className="w-12 h-12 m-1 fill-white" />
-				<span className="self-center text-6xl text-white font-semibold whitespace-nowrap ">Macrofit Tracker</span>
+				<span className="self-center text-2xl text-white font-semibold whitespace-nowrap ">Macrofit Tracker</span>
 		</a>
         </div>
       
-      <div className="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-3/5 bg-white rounded-lg pt-6 mt-5 mb-20">
+      <div className="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-3/5 bg-white rounded-lg pt-6 mt-2 mb-20">
             <div className="w-full">
             <h3 className="mb-3 text-4xl font-extrabold text-slate-600 text-center">Registrate</h3>
 
@@ -147,10 +153,24 @@ const Register = () => {
                         <input onChange={(e) => setConfirmPwd(e.target.value)} type="password" placeholder="Confirmar contraseña" className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-gray-200 text-slate-800 rounded-2xl" />
                     </div>
 
+                    <div className="col-span-2">
+                         <label className="inline-flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={termsAccepted}
+                              onChange={(e) => setTermsAccepted(e.target.checked)}
+                               className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                          />
+                         <span className="ml-2 text-sm text-gray-600">
+                              Al marcar esta casilla, acepta los <a href="/terminos-condiciones" className="text-indigo-600 underline">Términos y Condiciones</a> de Macrofit Tracker.
+                          </span>
+                     </label>
+                    </div>
+
                     <div className="flex mt-10 pt-14">
                     <button
                         className="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide mb-5 font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-[#fb6107] focus:ring-4 focus:ring-purple-blue-100 bg-[#fbb02d]">
-                        <span>Sign Up </span>
+                        <span>Registrarse </span>
 
                         <HiArrowCircleRight className="w-5 h-5 rtl:-scale-x-100" />
 
@@ -161,8 +181,8 @@ const Register = () => {
                 </form>
                     {
                         error &&(
-                        <div className=' w-56 text-center'>
-                            <p className=' bg-red-700 text-white rounded-md'>{error}</p>
+                        <div className=' w-full m-2 text-center'>
+                            <p className=' bg-red-700 text-white rounded-md p-2'>{error}</p>
                         </div> 
                         )
                     }

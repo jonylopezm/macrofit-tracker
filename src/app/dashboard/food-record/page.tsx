@@ -86,6 +86,7 @@ export const TodayResume: React.FC = () => {
     let totalProteins = 0;
     let totalCarbohydrates = 0;
     let daterecord;
+    let mealtype;
 
     filteredRecords.forEach((record) => {
       totalCalories += record.details.calories;
@@ -93,6 +94,7 @@ export const TodayResume: React.FC = () => {
       totalProteins += record.details.proteins;
       totalCarbohydrates += record.details.carbohydrates;
       daterecord = record.date;
+      mealtype = record.meal_type;
     });
 
     return {
@@ -101,6 +103,7 @@ export const TodayResume: React.FC = () => {
       totalProteins,
       totalCarbohydrates,
       daterecord,
+      mealtype,
     };
   };
 
@@ -111,6 +114,7 @@ export const TodayResume: React.FC = () => {
     totalProteins,
     totalCarbohydrates,
     daterecord,
+    mealtype,
   } = calculateTotalValues();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -142,12 +146,13 @@ export const TodayResume: React.FC = () => {
       Grasas: record.details.fats,
       Carbohidratos: record.details.carbohydrates,
       Porción: `${record.quantity} ${record.details.serving_size_units}`,
+      Tiempo: record.meal_type,
     }));
 
     // Crear hoja de trabajo y libro
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Resumen de Hoy");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Resumen");
 
     // Exportar archivo
     XLSX.writeFile(workbook, `Resumen_${daterecord}.xlsx`);
@@ -253,6 +258,9 @@ export const TodayResume: React.FC = () => {
                   <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
                     <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Porcion</p>
                   </th>
+                  <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                    <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Tiempo de comida</p>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -278,6 +286,9 @@ export const TodayResume: React.FC = () => {
                       </td>
                       <td className="py-3 px-5 border-b border-blue-gray-50">
                         <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">{record.quantity} {record.details.serving_size_units}</p>
+                      </td>
+                      <td className="py-3 px-5 border-b border-blue-gray-50">
+                        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">{record.meal_type}</p>
                       </td>
                     </tr>
                   );

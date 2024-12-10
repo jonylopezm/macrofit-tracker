@@ -44,7 +44,7 @@ const Login = () => {
   return (
     <div className="flex flex-col bg-gradient-to-br from-blue-600 to-blue-400 h-screen">
       <div className='flex flex-row lg:justify-start mt-10 ml-20 sm:justify-center'>
-        <a href="#" target="" className="flex">
+        <a href="/startpage" target="" className="flex">
           <RiMentalHealthFill  className="w-12 h-12 m-1 fill-white" />
           <span className="self-center lg:text-2xl sm:text-2xl text-white font-semibold whitespace-nowrap ">Macrofit Tracker</span>
         </a>
@@ -89,7 +89,7 @@ const Login = () => {
                 >
                   <a href="#">Iniciar Sesion</a>
                 </button>
-                <p className="text-sm leading-relaxed  text-slate-600">No estas registrado aún? <a href="/register" className="font-bold  text-slate-600">Create an Account</a></p>
+                <p className="text-sm leading-relaxed  text-slate-600">No estas registrado aún? <a href="/register" className="font-bold  text-slate-600">Registrate aqui</a></p>
                 
                 </form>
             </div>

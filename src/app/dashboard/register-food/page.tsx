@@ -57,7 +57,7 @@ const RegisterFood = () => {
         return;
       }
   
-  
+      
       const res = await fetch('/api/newfood', {
         method: "POST",
         headers: {
