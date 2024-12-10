@@ -4,13 +4,13 @@ import Swal from 'sweetalert2';
 
 const RegisterRecipe = () => {
   const [name, setName] = useState('');
-  const [servingSize, setServingSize] = useState<number | null>(null);
+  const [servingSize, setServingSize] = useState<number | number>(0);
   const [servingSizeUnits, setServingSizeUnits] = useState('g');
   const [servingType, setServingType] = useState('');
-  const [calories, setCalories] = useState<number | null>(null);
-  const [proteins, setProteins] = useState<number |null>(null);
-  const [carbohydrates, setCarbohydrates] = useState<number | null>(null);
-  const [fats, setFats] = useState<number | null>(null);
+  const [calories, setCalories] = useState<number | number>(0);
+  const [proteins, setProteins] = useState<number |number>(0);
+  const [carbohydrates, setCarbohydrates] = useState<number | number>(0);
+  const [fats, setFats] = useState<number | number>(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,13 +50,13 @@ const RegisterRecipe = () => {
         });
         // Reinicia los valores del formulario
         setName('');
-        setServingSize(null);
+        setServingSize(0);
         setServingSizeUnits('g');
         setServingType('');
-        setCalories(null);
-        setProteins(null);
-        setCarbohydrates(null);
-        setFats(null);
+        setCalories(0);
+        setProteins(0);
+        setCarbohydrates(0);
+        setFats(0);
       } else {
         console.error('Error registering recipe.');
         Swal.fire({
@@ -77,11 +77,13 @@ const RegisterRecipe = () => {
 
   return (
     <div className='w-full'>
-    <div className="mb-4 mt-4 grid grid-cols-1 gap-6 w-11/12 xl:grid-cols-2 bg-gradient-to-t rounded-xl bg-slate-50 text-gray-600">
-      <div className="w-full max-w-4xl mx-auto px-6 py-12 bg-white border-0 shadow-lg sm:rounded-3xl m-4">
+    <div className="mb-4 mt-4 flex flex-wrap gap-6 w-11/12 xl:grid-cols-1 bg-gradient-to-t rounded-xl bg-slate-50 text-gray-600">
+      <div className=" min-w-screen mx-auto px-6 py-12 bg-white border-0 shadow-lg sm:rounded-3xl m-4">
 
-        <h1 className="text-3xl font-bold mb-8">Registrar Receta</h1>
+        <h1 className="text-3xl font-bold mb-8">Agregar Comida/Receta</h1>
+        
         <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-4 gap-12">
           <div className="mb-4">
             <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Nombre:</label>
             <input
@@ -120,6 +122,7 @@ const RegisterRecipe = () => {
               <option value="taza">taza</option>
             </select>
           </div>
+         
 
           <div className="mb-4">
             <label htmlFor="servingType" className="block text-gray-700 font-bold mb-2">Tipo de porción:</label>
@@ -187,6 +190,7 @@ const RegisterRecipe = () => {
           >
             Registrar Receta
           </button>
+          </div>
         </form>
       </div>
     </div>

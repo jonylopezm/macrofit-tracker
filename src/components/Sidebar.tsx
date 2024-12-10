@@ -64,7 +64,7 @@ export const Sidebar = () => {
       <a className="" href="/dashboard/register-recipe">
         <button className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-gray-700 hover:bg-gradient-to-tr from-blue-600 to-blue-400 hover:text-white hover:shadow-lg hover:shadow-blue-500/40  active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize" type="button">
           <MdFoodBank className='w-5 h-5 text-inherit fill-current'/>
-          <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">Agregar Receta/Comida</p>
+          <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">Nueva Comida/Receta</p>
         </button>
       </a>
     </li>
